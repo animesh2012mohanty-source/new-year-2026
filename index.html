@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy New Year ✨</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #020024, #090979, #00d4ff);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.box {
+    background: rgba(0,0,0,0.65);
+    padding: 25px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 420px;
+    text-align: center;
+    animation: fade 1.2s ease;
+}
+
+input {
+    width: 90%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    margin-top: 15px;
+    font-size: 16px;
+}
+
+button {
+    margin-top: 15px;
+    padding: 12px 28px;
+    border-radius: 25px;
+    border: none;
+    background: #00e5ff;
+    color: black;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #18ffff;
+}
+
+.hidden { display: none; }
+
+span { color: #00e5ff; }
+
+@keyframes fade {
+    from {opacity: 0; transform: scale(0.9);}
+    to {opacity: 1; transform: scale(1);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="box" id="loginBox">
+    <h2>🎆 Welcome to <span>2026</span> 🎆</h2>
+    <p>Enter your name to unlock a personalized New Year message</p>
+    <input type="text" id="nameInput" placeholder="Your name here">
+    <br>
+    <button onclick="generateMessage()">Enter 🚀</button>
+</div>
+
+<div class="box hidden" id="resultBox">
+    <h2>✨ Happy New Year, <span id="userName"></span> ✨</h2>
+    <p id="meaning"></p>
+    <p id="prediction"></p>
+    <p id="relation"></p>
+    <hr>
+    <p style="font-style: italic;">
+        Built with logic & creativity by <b>Animesh</b> 💻🚀
+    </p>
+</div>
+
+<script>
+// ================== BASE NAME ==================
+const animeshMeaning = "‘Eternal and limitless light’ — representing curiosity, intelligence, and innovation.";
+
+// ================= NAME DATABASE ===============
+const nameDatabase = {
+    "anwesha": "‘Quest for truth’ — thoughtful and emotionally deep.",
+    "soumya": "‘Gentle and calm’ — balanced and kind-hearted.",
+    "somya": "‘Pure and peaceful’ — composed and insightful.",
+    "sri": "‘Prosperity and light’ — confident and radiant.",
+    "suhani": "‘Pleasant and charming’ — joyful and expressive.",
+    "rajendra": "‘Leader of leaders’ — authoritative and wise.",
+    "siddharth": "‘One who achieves goals’ — focused and determined.",
+    "rosalin": "‘Beautiful rose’ — elegant and creative.",
+    "rituparna": "‘Seasonal beauty’ — adaptable and thoughtful.",
+    "sogsedhi": "‘Rare and unique’ — original and courageous.",
+    "ayush": "‘Long life’ — energetic and optimistic."
+};
+
+// ============== FALLBACK TRAITS ================
+const traits = [
+    "creativity", "intelligence", "confidence",
+    "emotional strength", "curiosity", "leadership"
+];
+
+// ============== RELATION GENERATOR =============
+function generateRelation(nameTrait) {
+    return `💞 <b>Connection with Animesh:</b> Animesh represents eternal innovation and clarity, while your name reflects ${nameTrait}. Together, it symbolizes balance between logic and emotion — like perfectly synchronized code modules.`;
+}
+
+// ============== MAIN FUNCTION ==================
+function generateMessage() {
+    const name = document.getElementById("nameInput").value.trim();
+    if (!name) {
+        alert("Please enter your name 🙂");
+        return;
+    }
+
+    const key = name.toLowerCase();
+    let meaningText = "";
+    let predictionText = "";
+    let trait = "";
+
+    if (nameDatabase[key]) {
+        meaningText = nameDatabase[key];
+        trait = meaningText.split("—")[1] || "strength";
+    } else {
+        trait = traits[Math.floor(Math.random() * traits.length)];
+        meaningText = `Your name reflects ${trait} and individuality.`;
+    }
+
+    predictionText = `🔮 <b>2026 Prediction:</b> This year enhances your ${trait}, bringing growth, clarity, and new opportunities.`;
+
+    document.getElementById("userName").innerText = name;
+    document.getElementById("meaning").innerHTML = "🌟 <b>Name Meaning:</b> " + meaningText;
+    document.getElementById("prediction").innerHTML = predictionText;
+    document.getElementById("relation").innerHTML = generateRelation(trait);
+
+    document.getElementById("loginBox").classList.add("hidden");
+    document.getElementById("resultBox").classList.remove("hidden");
+}
+</script>
+
+</body>
+</html>
