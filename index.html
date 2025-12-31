@@ -2,148 +2,184 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<title>Happy New Year 🎉</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy New Year ✨</title>
 
 <style>
 body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #020024, #090979, #00d4ff);
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
-.box {
-    background: rgba(0,0,0,0.65);
-    padding: 25px;
-    border-radius: 16px;
-    width: 90%;
-    max-width: 420px;
-    text-align: center;
-    animation: fade 1.2s ease;
+.card {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(12px);
+  padding: 25px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 420px;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(0,0,0,0.4);
 }
 
 input {
-    width: 90%;
-    padding: 12px;
-    border-radius: 10px;
-    border: none;
-    margin-top: 15px;
-    font-size: 16px;
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  margin: 15px 0;
+  font-size: 16px;
 }
 
 button {
-    margin-top: 15px;
-    padding: 12px 28px;
-    border-radius: 25px;
-    border: none;
-    background: #00e5ff;
-    color: black;
-    font-weight: bold;
-    font-size: 16px;
-    cursor: pointer;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #00c6ff;
+  color: black;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 8px;
 }
 
 button:hover {
-    background: #18ffff;
+  background: #00e5ff;
 }
 
-.hidden { display: none; }
+.share {
+  background: #25D366;
+  color: black;
+}
 
-span { color: #00e5ff; }
-
-@keyframes fade {
-    from {opacity: 0; transform: scale(0.9);}
-    to {opacity: 1; transform: scale(1);}
+hr {
+  border: 0;
+  height: 1px;
+  background: rgba(255,255,255,0.3);
+  margin: 15px 0;
 }
 </style>
 </head>
 
 <body>
 
-<div class="box" id="loginBox">
-    <h2>🎆 Welcome to <span>2026</span> 🎆</h2>
-    <p>Enter your name to unlock a personalized New Year message</p>
-    <input type="text" id="nameInput" placeholder="Your name here">
-    <br>
-    <button onclick="generateMessage()">Enter 🚀</button>
-</div>
+<div class="card">
+  <h2>🎆 Happy New Year 2026 🎆</h2>
+  <p>Enter your name 👇</p>
 
-<div class="box hidden" id="resultBox">
-    <h2>✨ Happy New Year, <span id="userName"></span> ✨</h2>
-    <p id="meaning"></p>
-    <p id="prediction"></p>
-    <p id="relation"></p>
-    <hr>
-    <p style="font-style: italic;">
-        Built with logic & creativity by <b>Animesh</b> 💻🚀
-    </p>
+  <input type="text" id="username" placeholder="Your name">
+
+  <button onclick="showResult()">Enter ✨</button>
+
+  <div id="result"></div>
+
+  <button class="share" onclick="sharePage()">📲 Share with Friends</button>
 </div>
 
 <script>
-// ================== BASE NAME ==================
-const animeshMeaning = "‘Eternal and limitless light’ — representing curiosity, intelligence, and innovation.";
+/* ========= TRAIT BANK ========= */
+const traits = {
+  personality: [
+    "creative thinker", "natural leader", "deep observer",
+    "calm and composed", "emotionally intelligent",
+    "curious learner", "innovative mind",
+    "balanced personality", "kind-hearted soul",
+    "confident yet humble", "sharp decision maker",
+    "visionary mindset"
+  ],
 
-// ================= NAME DATABASE ===============
-const nameDatabase = {
-    "anwesha": "‘Quest for truth’ — thoughtful and emotionally deep.",
-    "soumya": "‘Gentle and calm’ — balanced and kind-hearted.",
-    "somya": "‘Pure and peaceful’ — composed and insightful.",
-    "sri": "‘Prosperity and light’ — confident and radiant.",
-    "suhani": "‘Pleasant and charming’ — joyful and expressive.",
-    "rajendra": "‘Leader of leaders’ — authoritative and wise.",
-    "siddharth": "‘One who achieves goals’ — focused and determined.",
-    "rosalin": "‘Beautiful rose’ — elegant and creative.",
-    "rituparna": "‘Seasonal beauty’ — adaptable and thoughtful.",
-    "sogsedhi": "‘Rare and unique’ — original and courageous.",
-    "ayush": "‘Long life’ — energetic and optimistic."
+  strengths: [
+    "turns ideas into reality",
+    "connects easily with people",
+    "handles challenges smartly",
+    "learns fast and adapts",
+    "inspires others naturally",
+    "never stops improving",
+    "balances logic and emotions",
+    "brings positivity everywhere"
+  ],
+
+  techVibes: [
+    "future AI thinker 🤖",
+    "creative coder 💻",
+    "startup founder energy 🚀",
+    "logic + creativity combo ⚡",
+    "next-gen innovator 🔧",
+    "debugger mindset 🧠",
+    "digital-age leader 🌐"
+  ],
+
+  predictions: [
+    "2026 will unlock new opportunities",
+    "a major personal upgrade is coming",
+    "confidence will rise sharply",
+    "new skills will shape your future",
+    "success through consistency awaits",
+    "strong friendships will form",
+    "creative growth will dominate",
+    "recognition is on the way"
+  ]
 };
 
-// ============== FALLBACK TRAITS ================
-const traits = [
-    "creativity", "intelligence", "confidence",
-    "emotional strength", "curiosity", "leadership"
+const relations = [
+  "Both names represent curiosity and discovery",
+  "Animesh and this name together symbolize intelligence and balance",
+  "A bond of creativity and logic is visible",
+  "Both energies complement each other perfectly",
+  "A connection built on understanding and growth",
+  "Friendship powered by trust and innovation",
+  "Together, the names reflect positivity and progress"
 ];
 
-// ============== RELATION GENERATOR =============
-function generateRelation(nameTrait) {
-    return `💞 <b>Connection with Animesh:</b> Animesh represents eternal innovation and clarity, while your name reflects ${nameTrait}. Together, it symbolizes balance between logic and emotion — like perfectly synchronized code modules.`;
+function pick(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 
-// ============== MAIN FUNCTION ==================
-function generateMessage() {
-    const name = document.getElementById("nameInput").value.trim();
-    if (!name) {
-        alert("Please enter your name 🙂");
-        return;
-    }
+/* ========= MAIN FUNCTION ========= */
+function showResult() {
+  const name = document.getElementById("username").value.trim();
+  if (!name) return alert("Please enter your name!");
 
-    const key = name.toLowerCase();
-    let meaningText = "";
-    let predictionText = "";
-    let trait = "";
+  document.getElementById("result").innerHTML = `
+    <hr>
+    <h3>✨ Hello ${name}!</h3>
 
-    if (nameDatabase[key]) {
-        meaningText = nameDatabase[key];
-        trait = meaningText.split("—")[1] || "strength";
-    } else {
-        trait = traits[Math.floor(Math.random() * traits.length)];
-        meaningText = `Your name reflects ${trait} and individuality.`;
-    }
+    <p><b>Personality:</b> ${pick(traits.personality)}</p>
+    <p><b>Strength:</b> ${pick(traits.strengths)}</p>
+    <p><b>Tech Vibe:</b> ${pick(traits.techVibes)}</p>
 
-    predictionText = `🔮 <b>2026 Prediction:</b> This year enhances your ${trait}, bringing growth, clarity, and new opportunities.`;
+    <hr>
 
-    document.getElementById("userName").innerText = name;
-    document.getElementById("meaning").innerHTML = "🌟 <b>Name Meaning:</b> " + meaningText;
-    document.getElementById("prediction").innerHTML = predictionText;
-    document.getElementById("relation").innerHTML = generateRelation(trait);
+    <p><b>${name} × Animesh Connection:</b><br>
+    ${pick(relations)}</p>
 
-    document.getElementById("loginBox").classList.add("hidden");
-    document.getElementById("resultBox").classList.remove("hidden");
+    <hr>
+
+    <p><b>2026 Prediction:</b><br>
+    ${pick(traits.predictions)}</p>
+
+    <p style="margin-top:15px;">
+    🌟 Wishing you a powerful and joyful New Year!<br>
+    — From <b>Animesh</b> 😎💙
+    </p>
+  `;
+}
+
+/* ========= SHARE ========= */
+function sharePage() {
+  const text = "🎆 Check this cool New Year website made by Animesh 😎✨";
+  const url = window.location.href;
+
+  if (navigator.share) {
+    navigator.share({ text, url });
+  } else {
+    alert("Copy this link and share:\n" + url);
+  }
 }
 </script>
 
